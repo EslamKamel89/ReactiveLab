@@ -33,5 +33,7 @@ Route::middleware(['auth'])->group(function () {
         )
         ->name('two-factor.show');
 });
-
+Route::group(['middleware' => 'auth', 'prefix' => 'lessons'], function () {
+    Route::view('/users', 'lessons.users')->name('lessons.users');
+});
 require __DIR__ . '/auth.php';

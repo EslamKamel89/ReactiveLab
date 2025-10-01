@@ -16,7 +16,9 @@ class UsersController extends Controller {
     }
     public function create(Request $request) {
         $validated =  $request->validate([
-            'name'
+            'name' => 'required|string|max:255',
+            'email' => 'required|unique:user,email|email',
+            'role' => 'required|string:255'
         ]);
     }
 }

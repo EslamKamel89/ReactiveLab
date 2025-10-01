@@ -37,6 +37,9 @@
                         <article class="bg-white border border-gray-200 rounded-xl p-4">
                             <div class="h-4  rounded mb-2" x-text="user.name"></div>
                             <div class="h-3  rounded text-xs text-muted" x-text="user.email"></div>
+                            <div class="flex w-full justify-end">
+                                <flux:badge color="lime" class="mt-2"> <span x-text="user.role"></span> </flux:badge>
+                            </div>
                         </article>
                     </template>
                 </template>

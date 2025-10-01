@@ -18,7 +18,10 @@ class UsersController extends Controller {
         $validated =  $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|unique:user,email|email',
-            'role' => 'required|string:255'
+            'role' => 'required|string:255',
+            'password' => 'required|string|max:255'
         ]);
+        $user = User::create($validated);
+        return response()->json($user);
     }
 }

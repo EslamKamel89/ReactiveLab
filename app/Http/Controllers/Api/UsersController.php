@@ -14,4 +14,9 @@ class UsersController extends Controller {
             ->orWhere('email', 'LIKE', "%{$search}%")->paginate(10);
         return $users;
     }
+    public function create(Request $request) {
+        $validated =  $request->validate([
+            'name'
+        ]);
+    }
 }

@@ -7,7 +7,7 @@
             <div class="bg-white border border-gray-200 rounded-xl p-2 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
                 <div class="flex-1">
                     <input type="text" placeholder="Search users..."
-                        x-model="search"
+                        x-model.debounce="search"
                         class="w-full rounded-lg border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500" />
                 </div>
                 <div class="flex items-center gap-2">
@@ -27,20 +27,25 @@
                         </article>
                     </template>
                 </template>
-                <template x-for="user in users" :key="user.id">
-                    <article class="bg-white border border-gray-200 rounded-xl p-4">
-                        <div class="h-4  rounded mb-2" x-text="user.name"></div>
-                        <div class="h-3  rounded text-xs text-muted" x-text="user.email"></div>
-                    </article>
+                <template x-if="!loading && users.length">
+                    <template x-for="user in users" :key="user.id">
+                        <article class="bg-white border border-gray-200 rounded-xl p-4">
+                            <div class="h-4  rounded mb-2" x-text="user.name"></div>
+                            <div class="h-3  rounded text-xs text-muted" x-text="user.email"></div>
+                        </article>
+                    </template>
+                </template>
+                <template x-if="!loading && !users.length && !error">
+                    <div class="sm:col-span-2 lg:col-span-3 text-sm text-gray-500">No users found.</div>
                 </template>
             </div>
 
             <!-- Footer / Pagination -->
             <div class="mt-6 flex items-center justify-between text-sm text-gray-600">
-                <div>Page 1 of 1</div>
+                <div>Page <span x-text="page"></span> of <span x-text="total"></span></div>
                 <div class="flex items-center gap-2">
-                    <button class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white">Prev</button>
-                    <button class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white">Next</button>
+                    <button :disabled="page <= 1 || loading" @click="page--;fetchList()" class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white cursor-pointer disabled:cursor-not-allowed">Prev</button>
+                    <button x-bind:disabled="page >= total || loading" @click="page++;fetchList()" class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white cursor-pointer disabled:cursor-not-allowed">Next</button>
                 </div>
             </div>
         </div>
@@ -52,12 +57,10 @@
             window.usersPage = () => {
                 return {
                     users: [],
-                    meta: {
-                        page: 1,
-                        last_page: 1,
-                        total: 0
-                    },
+
                     page: 1,
+                    last_page: 1,
+                    total: 0,
                     search: '',
                     loading: false,
                     error: '',
@@ -72,16 +75,16 @@
                             } = await axios.get('/api/users', {
                                 params: {
                                     search: search,
-                                    page: 1
+                                    page: this.page,
                                 },
                                 signal: this.controller.signal,
                             })
                             this.users = data.data;
-                            this.meta = {
-                                page: data.current_page,
-                                last_page: data.last_page,
-                                total: data.total
-                            }
+
+                            this.page = data.current_page;
+                            this.last_page = data.last_page;
+                            this.total = data.total;
+
                         } catch (e) {
                             if (e.name == 'CancelError' || e.code == 'ERR_CANCELED') return;
                             this.error = e?.response?.data?.message || e.message || 'Request failed';
@@ -93,7 +96,10 @@
                     },
                     init() {
                         this.fetchList(this.search);
-                        this.$watch('search', (search) => this.fetchList(search))
+                        this.$watch('search', (search) => {
+                            this.page = 1;
+                            this.fetchList(search);
+                        })
                     }
                 }
             }

@@ -35,5 +35,6 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::group(['middleware' => 'auth', 'prefix' => 'lessons'], function () {
     Route::view('/users', 'lessons.users')->name('lessons.users');
+    Route::view('/create-user', 'lessons.create-user')->name('lessons.create-user');
 });
 require __DIR__ . '/auth.php';

@@ -1,7 +1,12 @@
 <x-layouts.app :title="__('Users')">
     <section class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl" x-data="usersPage()">
         <div class="max-w-5xl mx-auto px-4 py-8">
-            <h1 class="text-2xl font-semibold mb-6">Users Directory</h1>
+            <div class="flex w-full justify-between">
+                <h1 class="text-2xl font-semibold mb-6">Users Directory</h1>
+                <flux:button :href="route('lessons.create-user')" wire:navigate icon="plus">
+                    Create User
+                </flux:button>
+            </div>
 
             <!-- Toolbar -->
             <div class="bg-white border border-gray-200 rounded-xl p-2 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">

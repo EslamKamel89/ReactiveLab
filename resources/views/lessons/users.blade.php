@@ -11,18 +11,28 @@
                         class="w-full rounded-lg border-gray-300 p-2 focus:border-indigo-500 focus:ring-indigo-500" />
                 </div>
                 <div class="flex items-center gap-2">
-                    <button class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white">Refresh</button>
+                    <button @click="fetchList(search)" class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white">Refresh</button>
                 </div>
             </div>
-
+            <div x-show="error" class="mt-4 rounded-lg border border-rose-200 bg-rose-50 text-rose-800 px-4 py-3 text-sm">
+                <span x-text="error"></span>
+            </div>
             <!-- List -->
             <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                @for ($i = 0; $i < 6; $i++)
+                <template x-if="loading && !users.length">
+                    <template x-for="i in 6" :key="i">
+                        <article class="bg-white border border-gray-200 rounded-xl p-4">
+                            <div class="h-4 w-28 bg-gray-200 rounded mb-2"></div>
+                            <div class="h-3 w-40 bg-gray-200 rounded"></div>
+                        </article>
+                    </template>
+                </template>
+                <template x-for="user in users" :key="user.id">
                     <article class="bg-white border border-gray-200 rounded-xl p-4">
-                    <div class="h-4 w-28 bg-gray-200 rounded mb-2"></div>
-                    <div class="h-3 w-40 bg-gray-200 rounded"></div>
+                        <div class="h-4  rounded mb-2" x-text="user.name"></div>
+                        <div class="h-3  rounded text-xs text-muted" x-text="user.email"></div>
                     </article>
-                    @endfor
+                </template>
             </div>
 
             <!-- Footer / Pagination -->
@@ -37,30 +47,59 @@
     </section>
     </div>
     <script>
-        axios.defaults.baseUrl = '/api';
-        axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-        function usersPage() {
-            return {
-                users: [],
-                meta: {
+        document.addEventListener('DOMContentLoaded', () => {
+            const axios = window.axios;
+            window.usersPage = () => {
+                return {
+                    users: [],
+                    meta: {
+                        page: 1,
+                        last_page: 1,
+                        total: 0
+                    },
                     page: 1,
-                    last_page: 1,
-                    total: 0
-                },
-                page: 1,
-                search: '',
-                loading: false,
-                error: '',
-                controller: null,
-                async fetchList(search) {
+                    search: '',
+                    loading: false,
+                    error: '',
+                    controller: null,
+                    async fetchList(search) {
+                        this.error = '';
+                        this.loading = true;
+                        this.controller = new AbortController();
+                        try {
+                            const {
+                                data
+                            } = await axios.get('/api/users', {
+                                params: {
+                                    search: search,
+                                    page: 1
+                                },
+                                signal: this.controller.signal,
+                            })
+                            this.users = data.data;
+                            this.meta = {
+                                page: data.current_page,
+                                last_page: data.last_page,
+                                total: data.total
+                            }
+                        } catch (e) {
+                            if (e.name == 'CancelError' || e.code == 'ERR_CANCELED') return;
+                            this.error = e?.response?.data?.message || e.message || 'Request failed';
+                            console.error(this.error);
+                        } finally {
+                            this.loading = false;
+                        }
 
-                },
-                init() {
-                    this.fetchList(this.search);
-                    this.$watch('search', (search) => this.fetchList(search))
+                    },
+                    init() {
+                        this.fetchList(this.search);
+                        this.$watch('search', (search) => this.fetchList(search))
+                    }
                 }
             }
-        }
+
+        });
+        // axios.defaults.baseURL = '/api';
+        // axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
     </script>
 </x-layouts.app>

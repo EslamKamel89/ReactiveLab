@@ -1,5 +1,6 @@
 <x-layouts.app :title="__('Users')">
-    <section class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl" x-data="usersPage()">
+    <section class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl" x-data="usersPage()"
+        @user-created.window="fetchList()">
         <div class="max-w-5xl mx-auto px-4 py-8">
             <div class="flex w-full justify-between">
                 <h1 class="text-2xl font-semibold mb-6">Users Directory</h1>

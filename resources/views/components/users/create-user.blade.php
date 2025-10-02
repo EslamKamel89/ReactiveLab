@@ -14,6 +14,7 @@
             <h2 class="text-lg font-semibold">New User</h2>
             <button class="px-3 py-1.5 rounded border" @click="closeDrawer()">✕</button>
         </div>
+        <p class="mt-1 text-xs text-rose-100 bg-red-600 rounded-lg p-2" x-show="errors.common" x-text="errors.common"></p>
 
         <form class="mt-4 space-y-4" @submit.prevent="submit">
             <div>
@@ -48,7 +49,7 @@
 
             <div class="flex justify-end gap-2 pt-2">
                 <button type="button" class="px-4 py-2 rounded-lg border" @click="closeDrawer()">Cancel</button>
-                <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 text-white">Save</button>
+                <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 text-white" :disabled="loading" x-text="loading ? 'Loading':'Save'"></button>
             </div>
         </form>
     </div>
@@ -67,7 +68,7 @@
                 },
                 closeDrawer() {
                     this.show = false;
-                    this.resetErrors();
+                    this.resetState();
                 },
                 loading: false,
                 form: {
@@ -80,20 +81,28 @@
                     name: '',
                     email: '',
                     password: '',
-                    role: ''
+                    role: '',
+                    common: '',
                 },
-                resetErrors() {
+                resetState(resetErrorOnly = false) {
+                    if (!resetErrorOnly) this.form = {
+                        name: '',
+                        email: '',
+                        password: '',
+                        role: 'user'
+                    };
                     this.errors = {
                         name: '',
                         email: '',
                         password: '',
-                        role: ''
+                        role: '',
+                        common: '',
                     };
                 },
                 controller: null,
                 async submit() {
                     this.loading = true;
-                    this.resetErrors();
+                    this.resetState(true);
                     this.controller?.abort();
                     this.controller = new AbortController();
                     try {
@@ -104,12 +113,14 @@
                             signal: this.controller.signal,
                         });
                         if (status == 200 || status == 201) {
-                            console.log(data)
+                            // console.log(data)
+                            this.$dispatch('user-created')
+                            this.closeDrawer();
                         }
                     } catch (error) {
                         const errors = error?.response?.data?.errors;
                         if (!errors) {
-                            console.error('Unknown error occurred')
+                            this.form.common = "Something went wrong please try again later";
                         }
                         this.errors = {
                             name: errors.name?.length ? errors.name[0] : '',
@@ -118,12 +129,13 @@
                             role: errors.role?.length ? errors.role[0] : ''
 
                         }
-                        console.log(this.errors);
+                    } finally {
+                        this.loading = false;
                     }
                 },
                 init() {
                     this.$watch('form', () => {
-                        console.log(this.form);
+                        // console.log(this.form);
                     })
                 }
             }

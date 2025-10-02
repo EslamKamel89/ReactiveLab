@@ -11,16 +11,19 @@ class UsersController extends Controller {
         $page = (int) $request->query('page', 1);
         $search  = trim($request->query('search', ''));
         $users = User::where('name', 'LIKE', "%{$search}%")
-            ->orWhere('email', 'LIKE', "%{$search}%")->paginate(10);
+            ->orWhere('email', 'LIKE', "%{$search}%")
+            ->latest()
+            ->paginate(10);
         return $users;
     }
     public function store(Request $request) {
         $validated =  $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|unique:user,email|email',
+            'email' => 'required|unique:users,email|email',
             'role' => 'required|string:255',
             'password' => 'required|string|max:255'
         ]);
+        // dd($validated);
         $user = User::create($validated);
         return response()->json($user);
     }

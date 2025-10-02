@@ -3,7 +3,7 @@
         <div class="max-w-5xl mx-auto px-4 py-8">
             <div class="flex w-full justify-between">
                 <h1 class="text-2xl font-semibold mb-6">Users Directory</h1>
-                <flux:button :href="route('lessons.create-user')" wire:navigate icon="plus">
+                <flux:button icon="plus" @click="$dispatch('open-create-user-drawer')">
                     Create User
                 </flux:button>
             </div>
@@ -56,6 +56,8 @@
                     <button x-bind:disabled="page >= total || loading" @click="page++;fetchList()" class="px-3 py-1.5 rounded-lg border border-gray-200 bg-white cursor-pointer disabled:cursor-not-allowed">Next</button>
                 </div>
             </div>
+            <!-- Drawer (hidden by default; will slide in from the right) -->
+            <x-users.create-user />
         </div>
     </section>
     </div>

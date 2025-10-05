@@ -62,7 +62,7 @@
         </div>
     </section>
     </div>
-    <script>
+    <script defer>
         document.addEventListener('DOMContentLoaded', () => {
             const axios = window.axios;
             window.usersPage = () => {

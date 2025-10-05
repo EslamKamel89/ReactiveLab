@@ -54,7 +54,7 @@
         </form>
     </div>
 </div>
-<script>
+<script defer>
     document.addEventListener('DOMContentLoaded', () => {
         const axios = window.axios;
         axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';

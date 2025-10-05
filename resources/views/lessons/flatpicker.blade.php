@@ -1,4 +1,4 @@
-<x-layouts.app :title="__('Users')">
+<x-layouts.app :title="__('Flatpickr')">
     <section class="flex  w-full my-3  flex-col gap-4 rounded-xl" x-data="datePicker()" x-init="initialize">
         <div class="max-w-xl w-full mx-auto px-4 ">
             <h1 class="text-2xl font-semibold mb-6">Flatpickr — Date Picker</h1>
@@ -14,7 +14,7 @@
                 <button type="button" class="px-3 py-2 rounded-lg border"
                     @click="value = ''">Clear</button>
                 <p class="text-sm text-gray-500">
-                    Selected (ISO): <span class="" x-text="pr(value)">hello</span>
+                    Selected (ISO): <span class="" x-text="value">hello</span>
                 </p>
             </div>
         </div>
@@ -25,6 +25,10 @@
             <input id="range" type="text" x-ref="range"
                 class="w-full p-2 rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
                 placeholder="Select a date range" />
+            <p class="text-sm text-gray-500">
+                Start: <span class="font-mono" x-text="start || '—'"></span> |
+                End: <span class="font-mono" x-text="end || '—'"></span>
+            </p>
         </div>
     </section>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -65,6 +69,13 @@
                             dateFormat: 'Y-m-d',
                             altInput: true,
                             altFormat: 'F j, Y',
+                            // inline: true,
+                            onChange: (_, val) => {
+                                let range = val.split('to')
+                                if (range.length != 2) return;
+                                range = range.map((r) => r.trim());
+                                [this.start, this.end] = range;
+                            }
 
                         });
                     }

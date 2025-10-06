@@ -37,5 +37,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'lessons'], function () {
     Route::view('/users', 'lessons.users')->name('lessons.users');
     Route::view('/flatpicker', 'lessons.flatpicker')->name('lessons.flatpicker');
     Route::view('/choices', 'lessons.choices')->name('lessons.choices');
+    Route::view('/quill', 'lessons.quill')->name('lessons.quill');
 });
 require __DIR__ . '/auth.php';

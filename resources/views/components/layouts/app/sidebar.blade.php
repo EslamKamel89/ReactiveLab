@@ -19,6 +19,7 @@
                 <flux:navlist.item icon="user" :href="route('lessons.users')" :current="request()->routeIs('lessons.users')">{{ __('Users') }}</flux:navlist.item>
                 <flux:navlist.item icon="clock" :href="route('lessons.flatpicker')" :current="request()->routeIs('lessons.flatpicker')">{{ __('Flatpicker') }}</flux:navlist.item>
                 <flux:navlist.item icon="adjustments-vertical" :href="route('lessons.choices')" :current="request()->routeIs('lessons.choices')">{{ __('Choices') }}</flux:navlist.item>
+                <flux:navlist.item icon="pencil" :href="route('lessons.quill')" :current="request()->routeIs('lessons.quill')">{{ __('Quill') }}</flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
 

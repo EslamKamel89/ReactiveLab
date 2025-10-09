@@ -22,12 +22,16 @@
                 <flux:navlist.item icon="pencil" :href="route('lessons.quill')" :current="request()->routeIs('lessons.quill')">{{ __('Quill') }}</flux:navlist.item>
                 <flux:navlist.item icon="arrow-down-tray" :href="route('lessons.dropzone')" :current="request()->routeIs('lessons.dropzone')">{{ __('Dropzone') }}</flux:navlist.item>
             </flux:navlist.group>
+            <flux:navlist.group :heading="__('Chart.js')" class="grid">
+                <flux:navlist.item icon="chart-bar" :href="route('lessons.chartjs.basics')" :current="request()->routeIs('lessons.chartjs.basics')">{{ __('Basics') }}</flux:navlist.item>
+            </flux:navlist.group>
+
         </flux:navlist>
 
 
 
         <flux:spacer />
-
+        <!--
         <flux:navlist variant="outline">
             <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
                 {{ __('Repository') }}
@@ -37,6 +41,7 @@
                 {{ __('Documentation') }}
             </flux:navlist.item>
         </flux:navlist>
+    -->
 
         <!-- Desktop User Menu -->
         <flux:dropdown class="hidden lg:block" position="bottom" align="start">

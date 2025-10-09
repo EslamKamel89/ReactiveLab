@@ -23,7 +23,7 @@
                 <flux:navlist.item icon="arrow-down-tray" :href="route('lessons.dropzone')" :current="request()->routeIs('lessons.dropzone')">{{ __('Dropzone') }}</flux:navlist.item>
             </flux:navlist.group>
             <flux:navlist.group :heading="__('Chart.js')" class="grid">
-                <flux:navlist.item icon="chart-bar" :href="route('lessons.chartjs.basics')" :current="request()->routeIs('lessons.chartjs.basics')">{{ __('Basics') }}</flux:navlist.item>
+                <flux:navlist.item icon="chart-bar" :href="route('lessons.chartjs.bar')" :current="request()->routeIs('lessons.chartjs.bar')">{{ __('Bar') }}</flux:navlist.item>
             </flux:navlist.group>
 
         </flux:navlist>

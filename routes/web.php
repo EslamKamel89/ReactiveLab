@@ -40,8 +40,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'lessons'], function () {
     Route::view('/quill', 'lessons.quill')->name('lessons.quill');
     Route::view('/dropzone', 'lessons.dropzone')->name('lessons.dropzone');
     Route::prefix('chartjs')->group(function () {
-
         Route::view('/bar', 'lessons.chartjs-bar')->name('lessons.chartjs.bar');
+        Route::view('/line', 'lessons.chartjs-line')->name('lessons.chartjs.line');
     });
 });
 require __DIR__ . '/auth.php';

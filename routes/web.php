@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'lessons'], function () {
     Route::prefix('chartjs')->group(function () {
         Route::view('/bar', 'lessons.chartjs-bar')->name('lessons.chartjs.bar');
         Route::view('/line', 'lessons.chartjs-line')->name('lessons.chartjs.line');
+        Route::view('/pie', 'lessons.chartjs-pie')->name('lessons.chartjs.pie');
     });
 });
 require __DIR__ . '/auth.php';

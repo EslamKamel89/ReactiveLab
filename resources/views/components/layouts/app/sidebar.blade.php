@@ -25,6 +25,7 @@
             <flux:navlist.group :heading="__('Chart.js')" class="grid">
                 <flux:navlist.item icon="chart-bar" :href="route('lessons.chartjs.bar')" :current="request()->routeIs('lessons.chartjs.bar')">{{ __('Bar') }}</flux:navlist.item>
                 <flux:navlist.item icon="presentation-chart-line" :href="route('lessons.chartjs.line')" :current="request()->routeIs('lessons.chartjs.line')">{{ __('Line') }}</flux:navlist.item>
+                <flux:navlist.item icon="chart-pie" :href="route('lessons.chartjs.pie')" :current="request()->routeIs('lessons.chartjs.pie')">{{ __('Pie') }}</flux:navlist.item>
             </flux:navlist.group>
 
         </flux:navlist>
